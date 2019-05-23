@@ -12,22 +12,23 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
+import com.izzatismail.place_mvvmexample.Models.NicePlace;
 import com.izzatismail.place_mvvmexample.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder> {
 
     private static final String TAG = "RecyclerAdapter";
-    private ArrayList<String> mImageName = new ArrayList<>();
-    private ArrayList<String> mImages = new ArrayList<>();
+
+    private List<NicePlace> mNicePlaces;
     private Context mContext;
 
-    public RecyclerAdapter(Context context, ArrayList<String> mImageName, ArrayList<String> mImages) {
-        this.mImageName = mImageName;
-        this.mImages = mImages;
+    public RecyclerAdapter(Context context, List<NicePlace> imageName) {
+        this.mNicePlaces = imageName;
         this.mContext = context;
     }
 
@@ -43,26 +44,27 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder viewHolder, final int i) {
         Log.d(TAG, "onBindViewHolder: called ");
 
-        //For circle image
+        //Set circle image
         Glide.with(mContext)
                 .asBitmap()
-                .load(mImages.get(i))
+                .load(mNicePlaces.get(i).getImageURL())
                 .into(viewHolder.imageView);
 
-        viewHolder.imageName.setText(mImageName.get(i));
+        viewHolder.imageName.setText(mNicePlaces.get(i).getTitle()); //Set Name to ViewHolder
+
         viewHolder.parentLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d(TAG, "onClick: clicked on " + mImageName.get(i));
+                Log.d(TAG, "onClick: clicked on " + mNicePlaces.get(i).getTitle());
 
-                Toast.makeText(mContext, mImageName.get(i),Toast.LENGTH_SHORT).show();
+                Toast.makeText(mContext, mNicePlaces.get(i).getTitle(),Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     @Override
     public int getItemCount() {
-        return mImageName.size();
+        return mNicePlaces.size();
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder{
